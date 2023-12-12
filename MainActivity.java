@@ -1,39 +1,41 @@
-package com.example.spinner;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
+package com.example.registration;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
 public class MainActivity extends AppCompatActivity {
-    String[] names = {"values1", "values2", "values3", "value4", "value5"};
+    EditText uname,password;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Spinner spinner = findViewById(R.id.sp1);
-        TextView textView = findViewById(R.id.t1);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        uname=findViewById(R.id.name);
+        password=findViewById(R.id.pass);
+        button=findViewById(R.id.reg);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                textView.setText(names[i]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
+            public void onClick(View view) {
+               String user=uname.getText().toString();
+               String pass=password.getText().toString();
+                SharedPreferences sharedPreferences=getSharedPreferences("share_pref",MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString("user",user);
+                editor.putString("pass",pass);
+                editor.apply();
+                Toast.makeText(MainActivity.this, "Registration successful",
+                        Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(MainActivity.this,MainActivity.class);
+                startActivity(intent);
             }
         });
     }
 }
-
